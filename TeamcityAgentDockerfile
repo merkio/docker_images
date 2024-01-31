@@ -1,0 +1,26 @@
+FROM rockylinux/rockylinux:9
+
+# Update and install packages from repositories
+RUN  dnf install -y dnf-utils epel-release
+RUN dnf update -y && dnf install -y git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
+
+# Install Helm
+RUN curl https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz -o helm-v3.13.2.tar.gz && tar -zxvf helm-v3.13.2.tar.gz && rm -rf helm-v3.13.2.tar.gz && mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64 && helm version
+
+# Install jFrog CLI to connect to artifactory
+RUN curl -fL https://install-cli.jfrog.io | sh && jf --version
+
+# Install sdkman to manage jvm languages and tools (e.g. java, maven, kotlin)
+RUN curl -s "https://get.sdkman.io" | bash
+SHELL ["/bin/bash", "-c"]
+
+# Configure image to use in rootless mode
+RUN useradd -c "Podman User" -m -d /home/podman podman
+RUN mkdir -p /home/podman && mkdir -p /opt/java8 && mkdir /opt/java11 && mkdir /opt/maven
+RUN usermod --add-subuids 10000-16535 --add-subgids 10000-16535 podman
+
+RUN source /root/.sdkman/bin/sdkman-init.sh && sdk install java 8.0.402-amzn && sdk install java 11.0.22-amzn  && sdk install maven 3.8.8
+#RUN mv /root/.sdkman/candidates/java/11.0.2-amzn/* /opt/java11/ && mv /root/.sdkman/candidates/java/8.0.402-amzn/* /opt/java8/ && mv /root/.sdkman/candidates/maven/3.8.8/* /opt/maven/
+RUN chown -R podman:podman /home/podman && chmod -R 755 /home/podman
+
+WORKDIR /home/podman
