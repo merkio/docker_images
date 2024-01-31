@@ -18,11 +18,19 @@ jobs:
       run: |
         echo $RELEASE_VERSION
         echo ${{ steps.vars.outputs.tag }}
+<<<<<<< Updated upstream
     - name: Create realese
       uses: ncipollo/release-action@v1
       with:
         skipIfReleaseExists: true
         token: ${{ secrets.GITHUB_TOKEN }}
+||||||| Stash base
+    - name: Create realese
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+=======
+>>>>>>> Stashed changes
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
     - name: Login to DockerHub
@@ -40,3 +48,7 @@ jobs:
         tags: |
           ishaman/teamcity-agent-java:latest
           ishaman/teamcity-agent-java:${{ steps.vars.outputs.tag }}
+    - name: Create realese
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
