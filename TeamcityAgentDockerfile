@@ -2,7 +2,10 @@ FROM rockylinux/rockylinux:9
 
 # Update and install packages from repositories
 RUN  dnf install -y dnf-utils epel-release
-RUN dnf update -y && dnf install -y helm git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
+RUN dnf update -y && dnf install -y git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
+
+# Install Helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Install jFrog CLI to connect to artifactory
 RUN curl -fL https://install-cli.jfrog.io | sh && jf --version
