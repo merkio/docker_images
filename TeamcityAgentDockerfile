@@ -5,7 +5,7 @@ RUN  dnf install -y dnf-utils epel-release
 RUN dnf update -y && dnf install -y git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
 
 # Install Helm
-RUN curl https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz -o helm-v3.13.2.tar.gz && tar -zxvf helm-v3.13.2.tar.gz && rm -rf helm-v3.13.2.tar.gz && mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64 && helm version
+RUN dnf install helm
 
 # Install jFrog CLI to connect to artifactory
 RUN curl -fL https://install-cli.jfrog.io | sh && jf --version
