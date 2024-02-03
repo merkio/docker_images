@@ -4,6 +4,8 @@ FROM rockylinux/rockylinux:9
 RUN  dnf install -y dnf-utils epel-release
 RUN dnf update -y && dnf install -y git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
 
+RUN echo 'alias docker="podman"' >> /root/.bashrc
+
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
@@ -19,8 +21,5 @@ RUN useradd -c "Podman User" -m -d /home/podman podman
 RUN mkdir -p /home/podman && mkdir -p /opt/java8 && mkdir /opt/java11 && mkdir /opt/maven
 RUN usermod --add-subuids 10000-16535 --add-subgids 10000-16535 podman
 
-RUN source /root/.sdkman/bin/sdkman-init.sh && sdk install java 8.0.402-amzn && sdk install java 11.0.22-amzn  && sdk install maven 3.8.8
-#RUN mv /root/.sdkman/candidates/java/11.0.2-amzn/* /opt/java11/ && mv /root/.sdkman/candidates/java/8.0.402-amzn/* /opt/java8/ && mv /root/.sdkman/candidates/maven/3.8.8/* /opt/maven/
-RUN chown -R podman:podman /home/podman && chmod -R 755 /home/podman
+RUN source /root/.sdkman/bin/sdkman-init.sh && sdk install java 8.0.402-amzn && sdk install java 11.0.22-amzn  && sdk install java 17.0.10-amzn && sdk install maven 3.8.8
 
-WORKDIR /home/podman
