@@ -12,6 +12,12 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 # Install jFrog CLI to connect to artifactory
 RUN curl -fL https://install-cli.jfrog.io | sh && jf --version
 
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+RUN rustup update
+RUN rustup target add wasm32-unknown-unknown
+RUN cargo install ripgrep trunk
+
 # Install sdkman to manage jvm languages and tools (e.g. java, maven, kotlin)
 RUN curl -s "https://get.sdkman.io" | bash
 SHELL ["/bin/bash", "-c"]
