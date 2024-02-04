@@ -1,8 +1,8 @@
-FROM rockylinux/rockylinux:9
+FROM --platform=$BUILDPLATFORM rockylinux/rockylinux:9
 
 # Update and install packages from repositories
 RUN  dnf install -y dnf-utils epel-release
-RUN dnf update -y && dnf install -y git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
+RUN dnf update -y && dnf install -y cmake gcc make git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
 
 RUN echo 'alias docker="podman"' >> /root/.bashrc
 
@@ -13,10 +13,14 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 RUN curl -fL https://install-cli.jfrog.io | sh && jf --version
 
 # Install Rust
-# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-# RUN rustup update
-# RUN rustup target add wasm32-unknown-unknown
-# RUN cargo install ripgrep trunk
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+RUN rustup update
+RUN rustup target add wasm32-unknown-unknown
+RUN rustup target add aarch64-unknown-linux-gnu
+RUN rustup target add arm-unknown-linux-gnueabi
+RUN rustup target add armv7-unknown-linux-gnueabihf
+
+RUN cargo install ripgrep trunk
 
 # Install sdkman to manage jvm languages and tools (e.g. java, maven, kotlin)
 RUN curl -s "https://get.sdkman.io" | bash
