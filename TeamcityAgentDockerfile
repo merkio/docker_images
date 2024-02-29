@@ -2,7 +2,7 @@ FROM --platform=$BUILDPLATFORM rockylinux/rockylinux:9
 
 # Update and install packages from repositories
 RUN  dnf install -y dnf-utils epel-release
-RUN dnf update -y && dnf install -y cmake gcc make git zip unzip podman wget curl slirp4netns fuse-overlayfs htop procps
+RUN dnf update -y && dnf install -y cmake gcc make git zip unzip podman wget slirp4netns fuse-overlayfs htop procps
 RUN dnf clean all
 RUN echo 'alias docker="podman"' >> /root/.bashrc
 
